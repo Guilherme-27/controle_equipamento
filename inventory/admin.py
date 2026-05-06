@@ -1,9 +1,9 @@
 from django.contrib import admin
-from .models import Equipamento, Sala, Status
+from .models import Ambiente, Equipamento, Status
 
 
-@admin.register(Sala)
-class SalaAdmin(admin.ModelAdmin):
+@admin.register(Ambiente)
+class AmbienteAdmin(admin.ModelAdmin):
     list_display = ("nome", "descricao")
     search_fields = ("nome",)
 
@@ -16,6 +16,6 @@ class StatusAdmin(admin.ModelAdmin):
 
 @admin.register(Equipamento)
 class EquipamentoAdmin(admin.ModelAdmin):
-    list_display = ("nome", "sala", "status", "data_atualizacao")
-    list_filter = ("sala", "status")
+    list_display = ("nome", "ambiente", "status", "data_atualizacao")
+    list_filter = ("ambiente", "status")
     search_fields = ("nome",)

@@ -2,23 +2,23 @@
 
 {% block content %}
 <div class="d-flex justify-content-between align-items-center mb-3">
-    <h1>Salas</h1>
-    <a class="btn btn-success" href="{% url 'sala_create' %}"><i class="bi bi-plus-circle"></i> Nova Sala</a>
+    <h1>Ambientes</h1>
+    <a class="btn btn-success" href="{% url 'ambiente_create' %}"><i class="bi bi-plus-circle"></i> Novo Ambiente</a>
 </div>
 <table class="table table-striped table-hover">
     <thead>
         <tr>
-            <th>Sala</th>
+            <th>Ambiente</th>
             <th>Descrição</th>
             <th>Status dos Equipamentos</th>
             <th>Ações</th>
         </tr>
     </thead>
     <tbody>
-        {% for item in salas_with_counts %}
+        {% for item in ambientes_with_counts %}
         <tr>
-            <td><a href="{% url 'sala_detail' item.sala.pk %}">{{ item.sala.nome }}</a></td>
-            <td>{{ item.sala.descricao }}</td>
+            <td><a href="{% url 'ambiente_detail' item.ambiente.pk %}">{{ item.ambiente.nome }}</a></td>
+            <td>{{ item.ambiente.descricao }}</td>
             <td>
                 {% with counts=item.counts %}
                     {% if counts.operante %}
@@ -36,13 +36,13 @@
                 {% endwith %}
             </td>
             <td>
-                <a href="{% url 'sala_update' item.sala.pk %}" class="btn btn-sm btn-primary">Editar</a>
-                <a href="{% url 'sala_delete' item.sala.pk %}" class="btn btn-sm btn-danger">Excluir</a>
+                <a href="{% url 'ambiente_update' item.ambiente.pk %}" class="btn btn-sm btn-primary">Editar</a>
+                <a href="{% url 'ambiente_delete' item.ambiente.pk %}" class="btn btn-sm btn-danger">Excluir</a>
             </td>
         </tr>
         {% empty %}
         <tr>
-            <td colspan="3">Nenhuma sala cadastrada.</td>
+            <td colspan="3">Nenhum ambiente cadastrado.</td>
         </tr>
         {% endfor %}
     </tbody>

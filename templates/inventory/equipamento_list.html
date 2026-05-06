@@ -11,10 +11,10 @@
         <input type="text" name="q" class="form-control" placeholder="Buscar por nome..." value="{{ current_q }}">
     </div>
     <div class="col-md-3">
-        <select name="sala" class="form-select">
-            <option value="">Todas as salas</option>
-            {% for sala in salas %}
-            <option value="{{ sala.pk }}" {% if current_sala == sala.pk|stringformat:"i" %}selected{% endif %}>{{ sala.nome }}</option>
+        <select name="ambiente" class="form-select">
+            <option value="">Todos os ambientes</option>
+            {% for ambiente in ambientes %}
+            <option value="{{ ambiente.pk }}" {% if current_ambiente == ambiente.pk|stringformat:"i" %}selected{% endif %}>{{ ambiente.nome }}</option>
             {% endfor %}
         </select>
     </div>
@@ -35,7 +35,7 @@
     <thead>
         <tr>
             <th>Nome</th>
-            <th><a href="?order={% if current_order == 'sala' %}-sala{% else %}sala{% endif %}" class="text-decoration-none">Sala {% if current_order == 'sala' %}↑{% elif current_order == '-sala' %}↓{% endif %}</a></th>
+            <th><a href="?order={% if current_order == 'ambiente' %}-ambiente{% else %}ambiente{% endif %}" class="text-decoration-none">Ambiente {% if current_order == 'ambiente' %}↑{% elif current_order == '-ambiente' %}↓{% endif %}</a></th>
             <th><a href="?order={% if current_order == 'status' %}-status{% else %}status{% endif %}" class="text-decoration-none">Status {% if current_order == 'status' %}↑{% elif current_order == '-status' %}↓{% endif %}</a></th>
             <th>Atualizado em</th>
             <th>Ações</th>
@@ -45,7 +45,7 @@
         {% for equipamento in equipamentos %}
         <tr>
             <td>{{ equipamento.nome }}</td>
-            <td>{{ equipamento.sala }}</td>
+            <td>{{ equipamento.ambiente }}</td>
             <td>
                 {% if "Operante" in equipamento.status.nome %}
                     <span class="badge bg-success">OK</span>

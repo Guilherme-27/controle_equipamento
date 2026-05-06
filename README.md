@@ -44,6 +44,6 @@ python manage.py runserver
 
 ## Modelo de dados
 
-- Sala: nome, descrição
+- Ambiente: nome, descrição
 - Status: nome, descrição
-- Equipamento: nome, sala, status, data de atualização
+- Equipamento: nome, ambiente, status, data de atualização

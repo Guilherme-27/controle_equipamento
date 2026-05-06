@@ -4,12 +4,12 @@ from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, DeleteView, DetailView, ListView, UpdateView
 
-from .models import Equipamento, Sala, Status
+from .models import Ambiente, Equipamento, Status
 
 
-class SalaForm(forms.ModelForm):
+class AmbienteForm(forms.ModelForm):
     class Meta:
-        model = Sala
+        model = Ambiente
         fields = ["nome", "descricao"]
         widgets = {
             'nome': forms.TextInput(attrs={'class': 'form-control'}),
@@ -20,10 +20,10 @@ class SalaForm(forms.ModelForm):
 class EquipamentoForm(forms.ModelForm):
     class Meta:
         model = Equipamento
-        fields = ["nome", "sala", "status"]
+        fields = ["nome", "ambiente", "status"]
         widgets = {
             'nome': forms.TextInput(attrs={'class': 'form-control'}),
-            'sala': forms.Select(attrs={'class': 'form-select'}),
+            'ambiente': forms.Select(attrs={'class': 'form-select'}),
             'status': forms.Select(attrs={'class': 'form-select'}),
         }
 
@@ -50,10 +50,10 @@ class EquipamentoListView(ListView):
             queryset = queryset.filter(status_id=status_id)
         # Ordenação existente
         self.order = self.request.GET.get('order', 'nome')
-        if self.order == 'sala':
-            queryset = queryset.order_by('sala__nome')
-        elif self.order == '-sala':
-            queryset = queryset.order_by('-sala__nome')
+        if self.order == 'ambiente':
+            queryset = queryset.order_by('ambiente__nome')
+        elif self.order == '-ambiente':
+            queryset = queryset.order_by('-ambiente__nome')
         elif self.order == 'status':
             queryset = queryset.order_by('status__nome')
         elif self.order == '-status':
@@ -67,10 +67,10 @@ class EquipamentoListView(ListView):
         context['current_order'] = self.order
         # Filtros atuais
         context['current_q'] = self.request.GET.get('q', '')
-        context['current_sala'] = self.request.GET.get('sala', '')
+        context['current_ambiente'] = self.request.GET.get('ambiente', '')
         context['current_status'] = self.request.GET.get('status', '')
         # Dados para dropdowns de filtro
-        context['salas'] = Sala.objects.all()
+        context['ambientes'] = Ambiente.objects.all()
         context['statuses'] = Status.objects.all()
         return context
 
@@ -83,11 +83,11 @@ class EquipamentoCreateView(CreateView):
 
     def get_initial(self):
         initial = super().get_initial()
-        sala_id = self.request.GET.get('sala')
-        if sala_id:
+        ambiente_id = self.request.GET.get('ambiente')
+        if ambiente_id:
             try:
-                initial['sala'] = Sala.objects.get(pk=sala_id)
-            except Sala.DoesNotExist:
+                initial['ambiente'] = Ambiente.objects.get(pk=ambiente_id)
+            except Ambiente.DoesNotExist:
                 pass
         return initial
 
@@ -105,18 +105,18 @@ class EquipamentoDeleteView(DeleteView):
     success_url = reverse_lazy("equipamento_list")
 
 
-class SalaListView(ListView):
-    model = Sala
-    template_name = "inventory/sala_list.html"
-    context_object_name = "salas"
+class AmbienteListView(ListView):
+    model = Ambiente
+    template_name = "inventory/ambiente_list.html"
+    context_object_name = "ambientes"
     paginate_by = 10
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        salas = context['salas']
-        salas_with_counts = []
-        for sala in salas:
-            counts = Equipamento.objects.filter(sala=sala).values('status__nome').annotate(count=Count('status')).order_by('status__nome')
+        ambientes = context['ambientes']
+        ambientes_with_counts = []
+        for ambiente in ambientes:
+            counts = Equipamento.objects.filter(ambiente=ambiente).values('status__nome').annotate(count=Count('status')).order_by('status__nome')
             count_dict = {}
             for item in counts:
                 nome = item['status__nome']
@@ -126,29 +126,29 @@ class SalaListView(ListView):
                     count_dict['parcial'] = item['count']
                 elif 'Inoperante' in nome:
                     count_dict['inoperante'] = item['count']
-            salas_with_counts.append({'sala': sala, 'counts': count_dict})
-        context['salas_with_counts'] = salas_with_counts
+            ambientes_with_counts.append({'ambiente': ambiente, 'counts': count_dict})
+        context['ambientes_with_counts'] = ambientes_with_counts
         return context
 
 
-class SalaDetailView(DetailView):
-    model = Sala
-    template_name = "inventory/sala_detail.html"
-    context_object_name = "sala"
+class AmbienteDetailView(DetailView):
+    model = Ambiente
+    template_name = "inventory/ambiente_detail.html"
+    context_object_name = "ambiente"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        sala = self.object
-        equipamentos = Equipamento.objects.filter(sala=sala)
+        ambiente = self.object
+        equipamentos = Equipamento.objects.filter(ambiente=ambiente)
         context['equipamentos'] = equipamentos
         return context
 
 
-class SalaCreateView(CreateView):
-    model = Sala
-    form_class = SalaForm
-    template_name = "inventory/sala_form.html"
-    success_url = reverse_lazy("sala_list")
+class AmbienteCreateView(CreateView):
+    model = Ambiente
+    form_class = AmbienteForm
+    template_name = "inventory/ambiente_form.html"
+    success_url = reverse_lazy("ambiente_list")
 
 
 class StatusListView(ListView):
@@ -164,24 +164,24 @@ class StatusCreateView(CreateView):
     success_url = reverse_lazy("status_list")
 
 
-class SalaUpdateView(UpdateView):
-    model = Sala
-    form_class = SalaForm
-    template_name = "inventory/sala_form.html"
-    success_url = reverse_lazy("sala_list")
+class AmbienteUpdateView(UpdateView):
+    model = Ambiente
+    form_class = AmbienteForm
+    template_name = "inventory/ambiente_form.html"
+    success_url = reverse_lazy("ambiente_list")
 
 
-class SalaDeleteView(DeleteView):
-    model = Sala
-    template_name = "inventory/sala_confirm_delete.html"
-    success_url = reverse_lazy("sala_list")
+class AmbienteDeleteView(DeleteView):
+    model = Ambiente
+    template_name = "inventory/ambiente_confirm_delete.html"
+    success_url = reverse_lazy("ambiente_list")
 
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
         if self.object.has_linked_equipamentos:
             return render(request, 'inventory/cannot_delete.html', {
-                'message': 'Não é possível excluir a sala pois existem equipamentos vinculados a esta.',
-                'cancel_url': reverse_lazy('sala_list')
+                'message': 'Não é possível excluir o ambiente pois existem equipamentos vinculados a este.',
+                'cancel_url': reverse_lazy('ambiente_list')
             })
         return super().get(request, *args, **kwargs)
 
