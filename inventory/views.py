@@ -122,7 +122,7 @@ class AmbienteListView(ListView):
                 nome = item['status__nome']
                 if 'Operante' in nome:
                     count_dict['operante'] = item['count']
-                elif 'Parcialmente' in nome:
+                elif 'Atenção' in nome:
                     count_dict['parcial'] = item['count']
                 elif 'Inoperante' in nome:
                     count_dict['inoperante'] = item['count']

@@ -25,10 +25,10 @@
                         <span class="badge bg-success">{{ counts.operante }} OK</span>
                     {% endif %}
                     {% if counts.parcial %}
-                        <span class="badge bg-warning text-dark">{{ counts.parcial }} Parcialmente</span>
+                        <span class="badge bg-warning text-dark">{{ counts.parcial }} Atenção</span>
                     {% endif %}
                     {% if counts.inoperante %}
-                        <span class="badge bg-danger">{{ counts.inoperante }} Sem funcionamento</span>
+                        <span class="badge bg-danger">{{ counts.inoperante }} Falha</span>
                     {% endif %}
                     {% if not counts.operante and not counts.parcial and not counts.inoperante %}
                         Nenhum equipamento
@@ -36,8 +36,8 @@
                 {% endwith %}
             </td>
             <td>
-                <a href="{% url 'ambiente_update' item.ambiente.pk %}" class="btn btn-sm btn-primary">Editar</a>
-                <a href="{% url 'ambiente_delete' item.ambiente.pk %}" class="btn btn-sm btn-danger">Excluir</a>
+                <a href="{% url 'ambiente_update' item.ambiente.pk %}" class="btn btn-sm btn-primary" title="Editar"><i class="bi bi-pencil"></i></a>
+                <a href="{% url 'ambiente_delete' item.ambiente.pk %}" class="btn btn-sm btn-danger" title="Excluir"><i class="bi bi-trash"></i></a>
             </td>
         </tr>
         {% empty %}

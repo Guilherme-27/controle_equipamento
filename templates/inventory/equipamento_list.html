@@ -49,16 +49,16 @@
             <td>
                 {% if "Operante" in equipamento.status.nome %}
                     <span class="badge bg-success">OK</span>
-                {% elif "Parcialmente" in equipamento.status.nome %}
-                    <span class="badge bg-warning text-dark">Parcialmente</span>
+                {% elif "Atenção" in equipamento.status.nome %}
+                    <span class="badge bg-warning text-dark">Atenção</span>
                 {% elif "Inoperante" in equipamento.status.nome %}
-                    <span class="badge bg-danger">Sem funcionamento</span>
+                    <span class="badge bg-danger">Falha</span>
                 {% endif %}
             </td>
             <td>{{ equipamento.data_atualizacao|date:"d/m/Y H:i" }}</td>
             <td>
-                <a class="btn btn-sm btn-primary" href="{% url 'equipamento_update' equipamento.pk %}"><i class="bi bi-pencil"></i> Editar</a>
-                <a class="btn btn-sm btn-danger" href="{% url 'equipamento_delete' equipamento.pk %}"><i class="bi bi-trash"></i> Excluir</a>
+                <a class="btn btn-sm btn-primary" href="{% url 'equipamento_update' equipamento.pk %}" title="Editar"><i class="bi bi-pencil"></i></a>
+                <a class="btn btn-sm btn-danger" href="{% url 'equipamento_delete' equipamento.pk %}" title="Excluir"><i class="bi bi-trash"></i></a>
             </td>
         </tr>
         {% empty %}
