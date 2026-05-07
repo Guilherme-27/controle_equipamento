@@ -16,6 +16,21 @@
                 <li class="nav-item"><a class="nav-link" href="/"><i class="bi bi-house-door"></i> Ambientes</a></li>
                 <li class="nav-item"><a class="nav-link" href="/equipamentos/"><i class="bi bi-pc-display"></i> Equipamentos</a></li>
             </ul>
+            <ul class="navbar-nav ms-auto">
+                {% if request.user.is_authenticated %}
+                    <li class="nav-item">
+                        <span class="navbar-text me-2">Olá, {{ request.user.username }}</span>
+                    </li>
+                    <li class="nav-item">
+                        <form method="post" action="{% url 'logout' %}" class="d-inline">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-link nav-link p-0">Sair</button>
+                        </form>
+                    </li>
+                {% else %}
+                    <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">Entrar</a></li>
+                {% endif %}
+            </ul>
         </div>
     </div>
 </nav>

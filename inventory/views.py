@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Count
 from django import forms
 from django.shortcuts import render
@@ -28,7 +29,7 @@ class EquipamentoForm(forms.ModelForm):
         }
 
 
-class EquipamentoListView(ListView):
+class EquipamentoListView(LoginRequiredMixin, ListView):
     model = Equipamento
     template_name = "inventory/equipamento_list.html"
     context_object_name = "equipamentos"
@@ -75,7 +76,7 @@ class EquipamentoListView(ListView):
         return context
 
 
-class EquipamentoCreateView(CreateView):
+class EquipamentoCreateView(LoginRequiredMixin, CreateView):
     model = Equipamento
     form_class = EquipamentoForm
     template_name = "inventory/equipamento_form.html"
@@ -97,7 +98,7 @@ class EquipamentoCreateView(CreateView):
         return initial
 
 
-class EquipamentoUpdateView(UpdateView):
+class EquipamentoUpdateView(LoginRequiredMixin, UpdateView):
     model = Equipamento
     form_class = EquipamentoForm
     template_name = "inventory/equipamento_form.html"
@@ -107,7 +108,7 @@ class EquipamentoUpdateView(UpdateView):
         return reverse_lazy("ambiente_detail", kwargs={"pk": ambiente_id})
 
 
-class EquipamentoDeleteView(DeleteView):
+class EquipamentoDeleteView(LoginRequiredMixin, DeleteView):
     model = Equipamento
     template_name = "inventory/equipamento_confirm_delete.html"
 
@@ -116,7 +117,7 @@ class EquipamentoDeleteView(DeleteView):
         return reverse_lazy("ambiente_detail", kwargs={"pk": ambiente_id})
 
 
-class AmbienteListView(ListView):
+class AmbienteListView(LoginRequiredMixin, ListView):
     model = Ambiente
     template_name = "inventory/ambiente_list.html"
     context_object_name = "ambientes"
@@ -142,7 +143,7 @@ class AmbienteListView(ListView):
         return context
 
 
-class AmbienteDetailView(DetailView):
+class AmbienteDetailView(LoginRequiredMixin, DetailView):
     model = Ambiente
     template_name = "inventory/ambiente_detail.html"
     context_object_name = "ambiente"
@@ -155,34 +156,34 @@ class AmbienteDetailView(DetailView):
         return context
 
 
-class AmbienteCreateView(CreateView):
+class AmbienteCreateView(LoginRequiredMixin, CreateView):
     model = Ambiente
     form_class = AmbienteForm
     template_name = "inventory/ambiente_form.html"
     success_url = reverse_lazy("ambiente_list")
 
 
-class StatusListView(ListView):
+class StatusListView(LoginRequiredMixin, ListView):
     model = Status
     template_name = "inventory/status_list.html"
     context_object_name = "statuses"
 
 
-class StatusCreateView(CreateView):
+class StatusCreateView(LoginRequiredMixin, CreateView):
     model = Status
     fields = ["nome", "descricao"]
     template_name = "inventory/status_form.html"
     success_url = reverse_lazy("status_list")
 
 
-class AmbienteUpdateView(UpdateView):
+class AmbienteUpdateView(LoginRequiredMixin, UpdateView):
     model = Ambiente
     form_class = AmbienteForm
     template_name = "inventory/ambiente_form.html"
     success_url = reverse_lazy("ambiente_list")
 
 
-class AmbienteDeleteView(DeleteView):
+class AmbienteDeleteView(LoginRequiredMixin, DeleteView):
     model = Ambiente
     template_name = "inventory/ambiente_confirm_delete.html"
     success_url = reverse_lazy("ambiente_list")
@@ -197,14 +198,14 @@ class AmbienteDeleteView(DeleteView):
         return super().get(request, *args, **kwargs)
 
 
-class StatusUpdateView(UpdateView):
+class StatusUpdateView(LoginRequiredMixin, UpdateView):
     model = Status
     fields = ["nome", "descricao"]
     template_name = "inventory/status_form.html"
     success_url = reverse_lazy("status_list")
 
 
-class StatusDeleteView(DeleteView):
+class StatusDeleteView(LoginRequiredMixin, DeleteView):
     model = Status
     template_name = "inventory/status_confirm_delete.html"
     success_url = reverse_lazy("status_list")
