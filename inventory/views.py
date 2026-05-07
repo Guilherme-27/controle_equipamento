@@ -40,10 +40,10 @@ class EquipamentoListView(ListView):
         q = self.request.GET.get('q')
         if q:
             queryset = queryset.filter(nome__icontains=q)
-        # Filtro por sala
-        sala_id = self.request.GET.get('sala')
-        if sala_id:
-            queryset = queryset.filter(sala_id=sala_id)
+        # Filtro por ambiente
+        ambiente_id = self.request.GET.get('ambiente')
+        if ambiente_id:
+            queryset = queryset.filter(ambiente_id=ambiente_id)
         # Filtro por status
         status_id = self.request.GET.get('status')
         if status_id:
@@ -79,7 +79,12 @@ class EquipamentoCreateView(CreateView):
     model = Equipamento
     form_class = EquipamentoForm
     template_name = "inventory/equipamento_form.html"
-    success_url = reverse_lazy("equipamento_list")
+
+    def get_success_url(self):
+        ambiente_id = self.request.GET.get('ambiente') or self.object.ambiente.pk
+        if ambiente_id:
+            return reverse_lazy("ambiente_detail", kwargs={"pk": ambiente_id})
+        return reverse_lazy("equipamento_list")
 
     def get_initial(self):
         initial = super().get_initial()
@@ -96,13 +101,19 @@ class EquipamentoUpdateView(UpdateView):
     model = Equipamento
     form_class = EquipamentoForm
     template_name = "inventory/equipamento_form.html"
-    success_url = reverse_lazy("equipamento_list")
+
+    def get_success_url(self):
+        ambiente_id = self.object.ambiente.pk
+        return reverse_lazy("ambiente_detail", kwargs={"pk": ambiente_id})
 
 
 class EquipamentoDeleteView(DeleteView):
     model = Equipamento
     template_name = "inventory/equipamento_confirm_delete.html"
-    success_url = reverse_lazy("equipamento_list")
+
+    def get_success_url(self):
+        ambiente_id = self.object.ambiente.pk
+        return reverse_lazy("ambiente_detail", kwargs={"pk": ambiente_id})
 
 
 class AmbienteListView(ListView):
