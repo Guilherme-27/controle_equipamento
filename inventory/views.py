@@ -60,8 +60,10 @@ class EquipamentoListView(LoginRequiredMixin, ListView):
             queryset = queryset.order_by('status__nome')
         elif self.order == '-status':
             queryset = queryset.order_by('-status__nome')
+        elif self.order == '-nome':
+            queryset = queryset.extra(select={'_len': 'LENGTH(nome)'}).order_by('-_len', '-nome')
         else:
-            queryset = queryset.order_by('nome')
+            queryset = queryset.extra(select={'_len': 'LENGTH(nome)'}).order_by('_len', 'nome')
         return queryset
 
     def get_context_data(self, **kwargs):

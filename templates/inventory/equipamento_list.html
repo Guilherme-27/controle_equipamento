@@ -34,9 +34,9 @@
 <table class="table table-striped table-hover">
     <thead>
         <tr>
-            <th>Nome</th>
-            <th><a href="?order={% if current_order == 'ambiente' %}-ambiente{% else %}ambiente{% endif %}" class="text-decoration-none">Ambiente {% if current_order == 'ambiente' %}↑{% elif current_order == '-ambiente' %}↓{% endif %}</a></th>
-            <th><a href="?order={% if current_order == 'status' %}-status{% else %}status{% endif %}" class="text-decoration-none">Status {% if current_order == 'status' %}↑{% elif current_order == '-status' %}↓{% endif %}</a></th>
+            <th><a href="?order={% if current_order == 'nome' %}-nome{% else %}nome{% endif %}&q={{ current_q }}&ambiente={{ current_ambiente }}&status={{ current_status }}" class="text-decoration-none">Nome {% if current_order == 'nome' %}↑{% elif current_order == '-nome' %}↓{% endif %}</a></th>
+            <th><a href="?order={% if current_order == 'ambiente' %}-ambiente{% else %}ambiente{% endif %}&q={{ current_q }}&ambiente={{ current_ambiente }}&status={{ current_status }}" class="text-decoration-none">Ambiente {% if current_order == 'ambiente' %}↑{% elif current_order == '-ambiente' %}↓{% endif %}</a></th>
+            <th><a href="?order={% if current_order == 'status' %}-status{% else %}status{% endif %}&q={{ current_q }}&ambiente={{ current_ambiente }}&status={{ current_status }}" class="text-decoration-none">Status {% if current_order == 'status' %}↑{% elif current_order == '-status' %}↓{% endif %}</a></th>
             <th>Atualizado em</th>
             <th>Ações</th>
         </tr>
@@ -74,19 +74,17 @@
     <ul class="pagination justify-content-center">
         {% if page_obj.has_previous %}
         <li class="page-item">
-            <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if current_q %}&q={{ current_q }}{% endif %}{% if current_sala %}&sala={{ current_sala }}{% endif %}{% if current_status %}&status={{ current_status }}{% endif %}{% if current_order != 'nome' %}&order={{ current_order }}{% endif %}">Anterior</a>
+            <a class="page-link" href="?page={{ page_obj.previous_page_number }}&q={{ current_q }}&ambiente={{ current_ambiente }}&status={{ current_status }}&order={{ current_order }}">Anterior</a>
         </li>
         {% endif %}
-
         {% for num in page_obj.paginator.page_range %}
         <li class="page-item {% if page_obj.number == num %}active{% endif %}">
-            <a class="page-link" href="?page={{ num }}{% if current_q %}&q={{ current_q }}{% endif %}{% if current_sala %}&sala={{ current_sala }}{% endif %}{% if current_status %}&status={{ current_status }}{% endif %}{% if current_order != 'nome' %}&order={{ current_order }}{% endif %}">{{ num }}</a>
+            <a class="page-link" href="?page={{ num }}&q={{ current_q }}&ambiente={{ current_ambiente }}&status={{ current_status }}&order={{ current_order }}">{{ num }}</a>
         </li>
         {% endfor %}
-
         {% if page_obj.has_next %}
         <li class="page-item">
-            <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if current_q %}&q={{ current_q }}{% endif %}{% if current_sala %}&sala={{ current_sala }}{% endif %}{% if current_status %}&status={{ current_status }}{% endif %}{% if current_order != 'nome' %}&order={{ current_order }}{% endif %}">Próximo</a>
+            <a class="page-link" href="?page={{ page_obj.next_page_number }}&q={{ current_q }}&ambiente={{ current_ambiente }}&status={{ current_status }}&order={{ current_order }}">Próximo</a>
         </li>
         {% endif %}
     </ul>
