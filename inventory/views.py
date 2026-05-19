@@ -1,4 +1,5 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.paginator import Paginator
 from django.db.models import Count
 from django import forms
 from django.shortcuts import render
@@ -49,18 +50,18 @@ class EquipamentoListView(LoginRequiredMixin, ListView):
         status_id = self.request.GET.get('status')
         if status_id:
             queryset = queryset.filter(status_id=status_id)
-        # Ordenação existente
         self.order = self.request.GET.get('order', 'nome')
-        if self.order == 'ambiente':
-            queryset = queryset.order_by('ambiente__nome')
-        elif self.order == '-ambiente':
-            queryset = queryset.order_by('-ambiente__nome')
-        elif self.order == 'status':
-            queryset = queryset.order_by('status__nome')
-        elif self.order == '-status':
-            queryset = queryset.order_by('-status__nome')
+        order_map = {
+            'ambiente': 'ambiente__nome', '-ambiente': '-ambiente__nome',
+            'status': 'status__nome', '-status': '-status__nome',
+            'data': 'data_atualizacao', '-data': '-data_atualizacao',
+        }
+        if self.order in order_map:
+            queryset = queryset.order_by(order_map[self.order])
+        elif self.order == '-nome':
+            queryset = queryset.extra(select={'_len': 'LENGTH(nome)'}).order_by('-_len', '-nome')
         else:
-            queryset = queryset.order_by('nome')
+            queryset = queryset.extra(select={'_len': 'LENGTH(nome)'}).order_by('_len', 'nome')
         return queryset
 
     def get_context_data(self, **kwargs):
@@ -147,12 +148,17 @@ class AmbienteDetailView(LoginRequiredMixin, DetailView):
     model = Ambiente
     template_name = "inventory/ambiente_detail.html"
     context_object_name = "ambiente"
+    paginate_by = 10
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        ambiente = self.object
-        equipamentos = Equipamento.objects.filter(ambiente=ambiente)
-        context['equipamentos'] = equipamentos
+        equipamentos = Equipamento.objects.filter(ambiente=self.object)
+        paginator = Paginator(equipamentos, self.paginate_by)
+        page_number = self.request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+        context['equipamentos'] = page_obj
+        context['page_obj'] = page_obj
+        context['is_paginated'] = paginator.num_pages > 1
         return context
 
 

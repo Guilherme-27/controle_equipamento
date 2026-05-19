@@ -18,7 +18,11 @@
         {% for item in ambientes_with_counts %}
         <tr>
             <td><a href="{% url 'ambiente_detail' item.ambiente.pk %}">{{ item.ambiente.nome }}</a></td>
-            <td>{{ item.ambiente.descricao }}</td>
+            <td style="max-width: 250px;">
+                <div style="overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;">
+                    {{ item.ambiente.descricao }}
+                </div>
+            </td>
             <td>
                 {% with counts=item.counts %}
                     {% if counts.operante %}
