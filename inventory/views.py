@@ -50,16 +50,14 @@ class EquipamentoListView(LoginRequiredMixin, ListView):
         status_id = self.request.GET.get('status')
         if status_id:
             queryset = queryset.filter(status_id=status_id)
-        # Ordenação existente
         self.order = self.request.GET.get('order', 'nome')
-        if self.order == 'ambiente':
-            queryset = queryset.order_by('ambiente__nome')
-        elif self.order == '-ambiente':
-            queryset = queryset.order_by('-ambiente__nome')
-        elif self.order == 'status':
-            queryset = queryset.order_by('status__nome')
-        elif self.order == '-status':
-            queryset = queryset.order_by('-status__nome')
+        order_map = {
+            'ambiente': 'ambiente__nome', '-ambiente': '-ambiente__nome',
+            'status': 'status__nome', '-status': '-status__nome',
+            'data': 'data_atualizacao', '-data': '-data_atualizacao',
+        }
+        if self.order in order_map:
+            queryset = queryset.order_by(order_map[self.order])
         elif self.order == '-nome':
             queryset = queryset.extra(select={'_len': 'LENGTH(nome)'}).order_by('-_len', '-nome')
         else:
