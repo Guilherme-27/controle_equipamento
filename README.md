@@ -34,7 +34,7 @@ Sistema web para controle de equipamentos escolares, permitindo cadastrar ambien
 
 1. Clone o repositório:
    ```bash
-   git clone https://github.com/seu-usuario/controle_equipamento.git
+   git clone https://github.com/Guilherme-27/controle_equipamento.git
    cd controle_equipamento
    ```
 
