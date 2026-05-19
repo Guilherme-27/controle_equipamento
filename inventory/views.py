@@ -1,4 +1,5 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.paginator import Paginator
 from django.db.models import Count
 from django import forms
 from django.shortcuts import render
@@ -147,12 +148,17 @@ class AmbienteDetailView(LoginRequiredMixin, DetailView):
     model = Ambiente
     template_name = "inventory/ambiente_detail.html"
     context_object_name = "ambiente"
+    paginate_by = 10
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        ambiente = self.object
-        equipamentos = Equipamento.objects.filter(ambiente=ambiente)
-        context['equipamentos'] = equipamentos
+        equipamentos = Equipamento.objects.filter(ambiente=self.object)
+        paginator = Paginator(equipamentos, self.paginate_by)
+        page_number = self.request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+        context['equipamentos'] = page_obj
+        context['page_obj'] = page_obj
+        context['is_paginated'] = paginator.num_pages > 1
         return context
 
 
