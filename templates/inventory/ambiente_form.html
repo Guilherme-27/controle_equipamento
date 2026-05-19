@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>{% if object %}Editar{% else %}Nova{% endif %} Sala</h1>
+<h1>{% if object %}Editar{% else %}Novo{% endif %} Ambiente</h1>
 <form method="post" class="mb-3">
     {% csrf_token %}
     <div class="mb-3">
@@ -13,6 +13,6 @@
         {{ form.descricao }}
     </div>
     <button type="submit" class="btn btn-primary">Salvar</button>
-    <a class="btn btn-secondary" href="{% url 'sala_list' %}">Cancelar</a>
+    <a class="btn btn-secondary" href="{% url 'ambiente_list' %}">Cancelar</a>
 </form>
 {% endblock %}

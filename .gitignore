@@ -9,6 +9,16 @@ db.sqlite3
 *.db
 *.sqlite3
 
+# Variáveis de Ambiente
+.env
+.env.local
+.env.*.local
+
+# Arquivos Estáticos Coletados
+static/
+staticfiles/
+media/
+
 # Python
 __pycache__/
 *.py[cod]
@@ -64,3 +74,6 @@ logs/
 
 # Dependências
 requirements-dev.txt
+
+# Etc
+.md

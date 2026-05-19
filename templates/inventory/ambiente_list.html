@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1>Ambientes</h1>
+    <a class="btn btn-success" href="{% url 'ambiente_create' %}"><i class="bi bi-plus-circle"></i> Novo Ambiente</a>
+</div>
+<table class="table table-striped table-hover">
+    <thead>
+        <tr>
+            <th>Ambiente</th>
+            <th>Descrição</th>
+            <th>Status dos Equipamentos</th>
+            <th>Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in ambientes_with_counts %}
+        <tr>
+            <td><a href="{% url 'ambiente_detail' item.ambiente.pk %}">{{ item.ambiente.nome }}</a></td>
+            <td style="max-width: 250px;">
+                <div style="overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;">
+                    {{ item.ambiente.descricao }}
+                </div>
+            </td>
+            <td>
+                {% with counts=item.counts %}
+                    {% if counts.operante %}
+                        <span class="badge bg-success">{{ counts.operante }} OK</span>
+                    {% endif %}
+                    {% if counts.parcial %}
+                        <span class="badge bg-warning text-dark">{{ counts.parcial }} Atenção</span>
+                    {% endif %}
+                    {% if counts.inoperante %}
+                        <span class="badge bg-danger">{{ counts.inoperante }} Falha</span>
+                    {% endif %}
+                    {% if not counts.operante and not counts.parcial and not counts.inoperante %}
+                        Nenhum equipamento
+                    {% endif %}
+                {% endwith %}
+            </td>
+            <td>
+                <a href="{% url 'ambiente_update' item.ambiente.pk %}" class="btn btn-sm btn-primary" title="Editar"><i class="bi bi-pencil"></i></a>
+                <a href="{% url 'ambiente_delete' item.ambiente.pk %}" class="btn btn-sm btn-danger" title="Excluir"><i class="bi bi-trash"></i></a>
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="3">Nenhum ambiente cadastrado.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% if is_paginated %}
+<nav aria-label="Paginação">
+    <ul class="pagination justify-content-center">
+        {% if page_obj.has_previous %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Anterior</a>
+        </li>
+        {% endif %}
+
+        {% for num in page_obj.paginator.page_range %}
+        <li class="page-item {% if page_obj.number == num %}active{% endif %}">
+            <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+        </li>
+        {% endfor %}
+
+        {% if page_obj.has_next %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ page_obj.next_page_number }}">Próximo</a>
+        </li>
+        {% endif %}
+    </ul>
+</nav>
+{% endif %}
+
+{% endblock %}

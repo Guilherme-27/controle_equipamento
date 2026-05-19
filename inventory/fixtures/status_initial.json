@@ -19,7 +19,7 @@
     "model": "inventory.status",
     "pk": 3,
     "fields": {
-      "nome": "⚠️ Parcialmente",
+      "nome": "⚠️ Atenção",
       "descricao": "Equipamento funcionando, mas com limitações." 
     }
   }

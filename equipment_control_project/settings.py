@@ -1,10 +1,11 @@
 from pathlib import Path
+import os
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = "django-insecure-replace-this-with-a-real-key"
-DEBUG = True
-ALLOWED_HOSTS = []
+SECRET_KEY = "#uiba1y)e^vn8jq9n^5*pk%^yz@@=qr0ojj*0=*4fgr-dir-&_"
+DEBUG = os.getenv('DEBUG', 'False') == 'True'
+ALLOWED_HOSTS = ['guilhermegabriel27.pythonanywhere.com','127.0.0.1', 'localhost']
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -18,6 +19,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -74,6 +76,12 @@ USE_I18N = True
 USE_TZ = True
 
 STATIC_URL = "/static/"
-# STATICFILES_DIRS = [BASE_DIR / "static"]
+# Onde o Django vai reunir todos os arquivos para a produção
+STATIC_ROOT = BASE_DIR / "staticfiles"
+# Onde o Django busca seus arquivos de desenvolvimento (sua pasta atual)
+STATICFILES_DIRS = [BASE_DIR / "static"]
+# Configuração do WhiteNoise para servir arquivos de forma eficiente
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+LOGOUT_REDIRECT_URL = "/"
